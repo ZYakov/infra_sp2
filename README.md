@@ -14,44 +14,41 @@
 ### Технологии
 Python 3.8
 Django 2.2.19
-### # Установка
-- Установите и активируйте виртуальное окружение
+Docker
+### # Шаблон наполнения .env файла
+
+	DB_ENGINE=django.db.backends.postgresql # провайдер
+	DB_NAME=postgres		        # имя базы данных
+	POSTGRES_USER=postgres			# пользователь базы данных
+	POSTGRES_PASSWORD=postgres		# пароль пользователя базы данных
+	DB_HOST=db 				# имя хоста баз данных
+	DB_PORT=5432			        # порт для работы с базой данных
+
+### # Запуск проекта в контейнерах Docker
+- Перейдите в раздел infra для сборки docker-compose
 ```
-python3 -m venv env
+# docker-compose up
 ```
-```
-source env/bin/activate
-```
-```
-python3 -m pip install --upgrade pip
-```
-- Установите зависимости из файла requirements.txt
-```
-pip install -r requirements.txt
-``` 
-- В папке с файлом manage.py выполните команду:
-```
-cd api_yamdb\manage.py
-```
+
 - Выполнить migrate
 ```
-python manage.py migrate
+docker-compose exec web python manage.py migrate
 ```
 - Для загрузки данных (опционально)
 ```
-python manage.py load_data_to_db
+docker-compose exec web python manage.py loaddata db.json
 ```
 - Создайте пользователя
 ```
-python manage.py createsuperuser
+docker-compose exec web python manage.py createsuperuser
 ```
 - (или) Сменить пароль для пользователя admin
 ```
-python manage.py changepassword admin
+docker-compose exec web python manage.py changepassword admin
 ```
-- Запуск сервиса
+- Сформируйте STATIC файлы:
 ```
-python manage.py runserver
+docker-compose exec web python manage.py collectstatic --no-input
 ```
 # API ресурсы:
 - **AUTH**: Аутентификация.
@@ -76,3 +73,6 @@ YaMDB отправляет письмо с кодом подтверждения
 - **Модератор (moderator)** — те же права, что и у Аутентифицированного пользователя плюс право удалять и редактировать любые отзывы и комментарии.
 - **Администратор (admin)** — полные права на управление проектом и всем его содержимым. Может создавать и удалять произведения, категории и жанры. Может назначать роли пользователям.
 - **Супер юзер** — те же права, что и у роли Администратор.
+
+### Авторы
+Златкин Яков
